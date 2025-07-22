@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import AddIncomeWrapper from "./Component/AddIncomeWrapper";
+import AddExpenseWrapper from "./Component/AddExpenseWrapper";
 
-function App() {
+interface Transaction {
+  type: "Income" | "Expense";
+  source: string;
+  amount: string;
+  date: string;
+}
+
+const App: React.FC = () => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const addTransaction = (transaction: Transaction) => {
+    setTransactions((prev) => [...prev, transaction]);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AddIncomeWrapper onAdd={addTransaction} />
+      <AddExpenseWrapper onAdd={addTransaction} />
+
+      <div className="list-container">
+        <h2>Transactions</h2>
+        <ul>
+          {transactions.map((trans, index) => (
+            <li
+              key={index}
+            >{`${trans.type}: ${trans.source} - ${trans.amount} on ${trans.date}`}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
-}
+};
 
 export default App;

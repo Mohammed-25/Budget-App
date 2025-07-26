@@ -4,20 +4,24 @@ import AddIncome from "./AddIncome";
 interface Income {
   type: "Income";
   source: string;
-  amount: string;
+  amount: number; // Change to number
   date: string;
 }
 
 interface AddIncomeWrapperProps {
   onAdd: (income: Income) => void;
+  onDelete: (index: number) => void;
+  incomes: Income[]; // This should be Income[]
 }
 
-const AddIncomeWrapper: React.FC<AddIncomeWrapperProps> = (props) => {
-  const { onAdd } = props;
-
+const AddIncomeWrapper: React.FC<AddIncomeWrapperProps> = ({
+  onAdd,
+  onDelete,
+  incomes,
+}) => {
   return (
     <div className="income-wrapper">
-      <AddIncome onAdd={onAdd} />
+      <AddIncome onAdd={onAdd} onDelete={onDelete} incomes={incomes} />
     </div>
   );
 };

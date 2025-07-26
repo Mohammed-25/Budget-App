@@ -4,20 +4,24 @@ import AddExpense from "./AddExpense";
 interface Expense {
   type: "Expense";
   source: string;
-  amount: string;
+  amount: number; // Change to number
   date: string;
 }
 
 interface AddExpenseWrapperProps {
   onAdd: (expense: Expense) => void;
+  onDelete: (index: number) => void;
+  expenses: Expense[]; // This should be Expense[]
 }
 
-const AddExpenseWrapper: React.FC<AddExpenseWrapperProps> = (props) => {
-  const { onAdd } = props;
-
+const AddExpenseWrapper: React.FC<AddExpenseWrapperProps> = ({
+  onAdd,
+  onDelete,
+  expenses,
+}) => {
   return (
     <div className="expense-wrapper">
-      <AddExpense onAdd={onAdd} />
+      <AddExpense onAdd={onAdd} onDelete={onDelete} expenses={expenses} />
     </div>
   );
 };

@@ -3,16 +3,17 @@ import React, { useState } from "react";
 interface Income {
   type: "Income";
   source: string;
-  amount: string;
+  amount: number; // Change to number
   date: string;
 }
 
 interface AddIncomeProps {
   onAdd: (income: Income) => void;
+  onDelete: (index: number) => void;
+  incomes: Income[];
 }
 
-const AddIncome: React.FC<AddIncomeProps> = (props) => {
-  const { onAdd } = props;
+const AddIncome: React.FC<AddIncomeProps> = ({ onAdd, onDelete, incomes }) => {
   const [incomeSource, setIncomeSource] = useState<string>("");
   const [incomeAmount, setIncomeAmount] = useState<string>("");
   const [incomeDate, setIncomeDate] = useState<string>("");
@@ -22,7 +23,7 @@ const AddIncome: React.FC<AddIncomeProps> = (props) => {
       onAdd({
         type: "Income",
         source: incomeSource,
-        amount: incomeAmount,
+        amount: Number(incomeAmount),
         date: incomeDate,
       });
       setIncomeSource("");
@@ -52,6 +53,14 @@ const AddIncome: React.FC<AddIncomeProps> = (props) => {
         onChange={(e) => setIncomeDate(e.target.value)}
       />
       <button onClick={handleAddIncome}>Add Income</button>
+      <ul>
+        {incomes.map((income, index) => (
+          <li key={index}>
+            {income.source}: {income.amount} on {income.date}
+            <button onClick={() => onDelete(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

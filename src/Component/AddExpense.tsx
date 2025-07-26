@@ -3,16 +3,21 @@ import React, { useState } from "react";
 interface Expense {
   type: "Expense";
   source: string;
-  amount: string;
+  amount: number; // Change to number
   date: string;
 }
 
 interface AddExpenseProps {
   onAdd: (expense: Expense) => void;
+  onDelete: (index: number) => void;
+  expenses: Expense[];
 }
 
-const AddExpense: React.FC<AddExpenseProps> = (props) => {
-  const { onAdd } = props;
+const AddExpense: React.FC<AddExpenseProps> = ({
+  onAdd,
+  onDelete,
+  expenses,
+}) => {
   const [expenseSource, setExpenseSource] = useState<string>("");
   const [expenseAmount, setExpenseAmount] = useState<string>("");
   const [expenseDate, setExpenseDate] = useState<string>("");
@@ -22,7 +27,7 @@ const AddExpense: React.FC<AddExpenseProps> = (props) => {
       onAdd({
         type: "Expense",
         source: expenseSource,
-        amount: expenseAmount,
+        amount: Number(expenseAmount),
         date: expenseDate,
       });
       setExpenseSource("");
@@ -52,6 +57,14 @@ const AddExpense: React.FC<AddExpenseProps> = (props) => {
         onChange={(e) => setExpenseDate(e.target.value)}
       />
       <button onClick={handleAddExpense}>Add Expense</button>
+      <ul>
+        {expenses.map((expense, index) => (
+          <li key={index}>
+            {expense.source}: {expense.amount} on {expense.date}
+            <button onClick={() => onDelete(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
